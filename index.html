@@ -4,27 +4,151 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Eggplant Leaf Disease Detection</title>
-  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background: url('https://upload.wikimedia.org/wikipedia/commons/4/47/Eggplant_leaf_with_disease.jpg') no-repeat center center/cover;
+      color: #fff;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      background: rgba(0, 0, 0, 0.65);
+      border-radius: 15px;
+      padding: 20px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(0,0,0,0.6);
+    }
+
+    h1 {
+      margin-bottom: 15px;
+      color: #9aff9a;
+      font-size: 1.5em;
+    }
+
+    .camera-container video {
+      width: 100%;
+      border-radius: 12px;
+      border: 3px solid #8bc34a;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 12px 20px;
+      background-color: #4caf50;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #43a047;
+      transform: scale(1.05);
+    }
+
+    #result-box {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+    }
+
+    #home-icon, #camera-icon {
+      position: fixed;
+      top: 15px;
+      background: rgba(0,0,0,0.5);
+      padding: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 20px;
+      color: #fff;
+      transition: 0.3s ease;
+    }
+
+    #home-icon:hover, #camera-icon:hover {
+      background: rgba(0,0,0,0.7);
+    }
+
+    #home-icon {
+      left: 15px;
+    }
+
+    #camera-icon {
+      right: 15px;
+    }
+  </style>
 </head>
 <body>
-  <div class="app-container" id="homeScreen">
+  <div id="home-icon" title="Home">🏠</div>
+  <div id="camera-icon" title="Camera">📷</div>
+
+  <div class="container">
     <h1>Eggplant Leaf Disease Detection</h1>
-    <div class="image-preview">
-      <img id="leafImage" src="leaf_placeholder.png" alt="Leaf Preview">
+
+    <div class="camera-container">
+      <video id="camera" autoplay playsinline></video>
+      <canvas id="snapshot" style="display:none;"></canvas>
     </div>
-    <input type="file" id="imageUpload" accept="image/*" hidden>
-    <div class="buttons">
-      <button class="camera-btn" id="cameraBtn">
-        <img src="camera_icon.png" alt="Camera">
-      </button>
-      <button class="home-btn" id="homeBtn">
-        <img src="home_icon.png" alt="Home">
-      </button>
-    </div>
-    <div class="result" id="result">
-      <p>Upload or capture a leaf image to detect its disease.</p>
+
+    <button id="capture-btn">📸 Scan Leaf</button>
+
+    <div id="result-box">
+      <h2 id="result-text">Result will appear here...</h2>
     </div>
   </div>
-  <script src="script.js"></script>
+
+  <script>
+    const video = document.getElementById('camera');
+    const canvas = document.getElementById('snapshot');
+    const resultText = document.getElementById('result-text');
+
+    // Start camera
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+      .then(stream => { video.srcObject = stream; })
+      .catch(err => alert("Camera error: " + err));
+
+    // Capture and analyze
+    document.getElementById('capture-btn').addEventListener('click', () => {
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(video, 0, 0);
+
+      // Simulated detection (you can replace with AI model later)
+      const diseases = [
+        { name: "Healthy Leaf 🍃", desc: "No signs of disease detected." },
+        { name: "Leaf Spot Disease 🌿", desc: "Brown or black spots found on the leaf." },
+        { name: "Mosaic Virus 🦠", desc: "Uneven green and yellow patterns detected." },
+        { name: "White Mold ❄️", desc: "White powdery growth seen on the surface." },
+        { name: "Bacterial Wilt 💧", desc: "Leaf appears droopy and discolored." },
+        { name: "Phomopsis Blight 🍂", desc: "Dark sunken lesions seen on leaves and stems." },
+        { name: "Fusarium Wilt 🧬", desc: "Yellowing and wilting of older leaves." },
+        { name: "Anthracnose 🍁", desc: "Circular dark spots causing leaf drop." }
+      ];
+
+      const result = diseases[Math.floor(Math.random() * diseases.length)];
+      resultText.innerHTML = `<strong>${result.name}</strong><br>${result.desc}`;
+    });
+
+    // Home button
+    document.getElementById('home-icon').addEventListener('click', () => {
+      window.location.reload();
+    });
+
+    // Camera button
+    document.getElementById('camera-icon').addEventListener('click', () => {
+      alert('Camera already active. Point it at the leaf to scan.');
+    });
+  </script>
 </body>
 </html>
