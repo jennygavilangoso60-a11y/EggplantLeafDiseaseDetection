@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eggplant Leaf Disease Detection</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-container" id="homeScreen">
+    <h1>Eggplant Leaf Disease Detection</h1>
+    <div class="image-preview">
+      <img id="leafImage" src="leaf_placeholder.png" alt="Leaf Preview">
+    </div>
+    <input type="file" id="imageUpload" accept="image/*" hidden>
+    <div class="buttons">
+      <button class="camera-btn" id="cameraBtn">
+        <img src="camera_icon.png" alt="Camera">
+      </button>
+      <button class="home-btn" id="homeBtn">
+        <img src="home_icon.png" alt="Home">
+      </button>
+    </div>
+    <div class="result" id="result">
+      <p>Upload or capture a leaf image to detect its disease.</p>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
